@@ -1,5 +1,5 @@
-import React from 'react'
-import Link from "next/link";
+import React, {useRef} from 'react'
+import Link from "next/Link";
 import Image from "next/image";
 import {
   SearchIcon,
@@ -8,7 +8,14 @@ import {
   UserCircleIcon,
   UsersIcon,
 } from "@heroicons/react/solid";
-function Header({ showScrollHead }) {
+function Header({ showScrollHead,searchTermValue }) {
+  const searchTermRef = useRef(null)
+  
+  
+  const searchEntered = () => {
+    const searchTerm = searchTermRef.current.value
+    searchTermValue(searchTerm)
+  }
   return (
     <>
       {showScrollHead && (
@@ -28,9 +35,11 @@ function Header({ showScrollHead }) {
           {/* search */}
           <div className="flex items-center py-2 rounded-full md:border-2 md:shadow-sm">
             <input
+               ref={searchTermRef}
               type="text"
               placeholder="enter search terms"
               className="flex-grow pl-5 text-sm text-gray-400 bg-transparent outline-none"
+              onKeyUp={searchEntered}
             />
             <SearchIcon className="hidden h-8 p-2 text-white bg-red-400 rounded-full cursor-pointer md:inline-flex md:mx-2" />
           </div>
