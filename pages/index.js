@@ -6,22 +6,31 @@ import Header from "../components/Header";
 import LargeCard from "../components/LargeCard";
 import MediumCard from "../components/MediumCard";
 import SmallCard from "../components/SmallCard";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 export default function Home({ fetchedData, sermonData }) {
   const [showScrollHead, setShowScrollHead] = useState(false);
 
   useEffect(() => {
-    window.onscroll = function() {
-      if(window.pageYOffset > 0) {
-        setShowScrollHead(true)
-      }else{
-        setShowScrollHead(false)
+    window.onscroll = function () {
+      if (window.pageYOffset > 0) {
+        setShowScrollHead(true);
+      } else {
+        setShowScrollHead(false);
       }
     };
     return () => {
       window.onscroll = null;
     };
   }, [showScrollHead]);
+  useEffect(() => {
+    AOS.init({
+      easing: "ease-out-cubic",
+      once: false,
+      duration: 2000,
+    });
+  }, []);
 
   return (
     <div className="">
@@ -36,7 +45,10 @@ export default function Home({ fetchedData, sermonData }) {
         <section className="pt-6">
           <h2 className="pb-5 text-4xl font-semibold ">Explore Nearby</h2>
           {/* add data */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div
+            data-aos="zoom-in-up"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+          >
             {fetchedData["page_contents"]?.map((item) => (
               <SmallCard
                 key={item.id}
@@ -49,16 +61,21 @@ export default function Home({ fetchedData, sermonData }) {
           </div>
         </section>
 
-        <LargeCard
-          title="Rohi Foundation"
-          subTitle="Providing help to mankind through the work of God"
-          btnText="Visit Us"
-          image="/uploads/small_3e2af664e061013a3d05aa99fa20c1d4_473af3fcc2.jpg?58464929.5"
-        />
+        <div data-aos="zoom-in-up">
+          <LargeCard
+            title="Rohi Foundation"
+            subTitle="Providing help to mankind through the work of God"
+            btnText="Visit Us"
+            image="/uploads/small_3e2af664e061013a3d05aa99fa20c1d4_473af3fcc2.jpg?58464929.5"
+          />
+        </div>
 
         <section>
           <h2 className="py-8 text-4xl font-semibold">Video Sermons</h2>
-          <div className="flex p-2 space-x-3 overflow-scroll scrollbar-hide">
+          <div
+            data-aos="zoom-in-up"
+            className="flex p-2 space-x-3 overflow-scroll scrollbar-hide"
+          >
             {sermonData["page_contents"]?.map((item) => (
               <MediumCard
                 key={item.id}
