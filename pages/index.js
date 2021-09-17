@@ -28,7 +28,7 @@ export default function Home({ fetchedData, sermonData }) {
     AOS.init({
       easing: "ease-out-cubic",
       once: false,
-      duration: 2000,
+      duration: 1000,
     });
   }, []);
 
