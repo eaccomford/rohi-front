@@ -8,10 +8,11 @@ import { open } from 'sqlite'
         filename: './database.db',
         driver: sqlite3.Database
       })
-      await db.migrate({force: 'last'})
+      
+      // await db.migrate({force: 'last'})
 
-      const comments  = await db.all("select * from comments")
-      console.log(JSON.stringify(comments, null,2));
+      // const comments  = await db.all("select * from comments")
+      // console.log(JSON.stringify(comments, null,2));
     } catch (err) {
       console.log(err)
     }

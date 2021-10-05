@@ -1,9 +1,16 @@
-import { Fragment,useState } from "react";
+import { Fragment,useState,useEffect } from "react";
 import Image from "next/image";
 import Header from "../../components/Header";
 import SmallCard from "../../components/SmallCard";
+import PosterCard from "../../components/PosterCard";
 import Fuse from 'fuse.js'
-function index({ fetchedData }) {
+import AOS from "aos";
+import "aos/dist/aos.css";
+import NextNprogress from 'nextjs-progressbar';
+import Footer from "../../components/Footer";
+import MediumCard from "../../components/MediumCard";
+
+function index({ fetchedData, sermonVideos }) {
   const [searchValue, setSearchValue] = useState('')
 
   const showScrollHead = true;
@@ -17,8 +24,17 @@ function index({ fetchedData }) {
   const results = fuse.search(searchValue)
   const sermondata = searchValue ? results.map(result => result.item) : fetchedData["page_contents"]
 
+  useEffect(() => {
+    AOS.init({
+      easing: "zoom-in-up",
+      once: false,
+      duration: 1000,
+    });
+  }, []);
+
   return (
     <Fragment>
+       <NextNprogress color="#29D" height={3} showOnShallow={true}/>
       <Header showScrollHead={showScrollHead} searchTermValue={searchTermValue}/>
 
       {/* banner */}
@@ -44,7 +60,7 @@ function index({ fetchedData }) {
       <section className="pt-6">
       <h2 className="pb-5 text-4xl font-semibold ">Sermons</h2>
         {/* add data */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" data-aos="zoom-in-up">
           {sermondata?.map((item) => (
             <SmallCard
               key={item.id}
@@ -55,9 +71,33 @@ function index({ fetchedData }) {
             />
           ))}
         </div>
+        <PosterCard
+              id={sermondata[0]?.id}
+              image={sermondata[0]?.image?.url}
+              title={sermondata[0]?.title}
+              body={sermondata[0]?.body}
+              publishedAt={sermondata[0]?.published_at}
+            />
+            {/* <MediumCard/> */}
+            <section>
+          <h2 className="py-8 text-4xl font-semibold">Video Sermons</h2>
+          <div
+            data-aos="zoom-in-up"
+            className="flex grid sm:grid-flow-row sm:grid-cols-3"
+          >
+            {sermonVideos['page_contents']?.map((item) => (
+                <MediumCard
+                  key={item.id}
+                  video={item.fileCaption}
+                  title={item.title}
+                  publishedAt={item.published_at}
+                />
+            ))}
+          </div>
+        </section>
       </section>
       </main>
-
+      <Footer />
     </Fragment>
   );
 }
@@ -69,9 +109,13 @@ export async function getStaticProps() {
   const fetchedData = await fetch("http://localhost:1337/pages/1").then((res) =>
     res.json()
   );
+  const sermonVideos = await fetch("http://localhost:1337/pages/4").then((res) =>
+    res.json()
+  );
   return {
     props: {
-      fetchedData
+      fetchedData,
+      sermonVideos
     },
     revalidate: 10 // 3600 = 1hr, 1= 1seconds
   };

@@ -8,6 +8,7 @@ import MediumCard from "../components/MediumCard";
 import SmallCard from "../components/SmallCard";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import NextNprogress from 'nextjs-progressbar';
 
 export default function Home({ fetchedData, sermonData }) {
   const [showScrollHead, setShowScrollHead] = useState(false);
@@ -34,6 +35,7 @@ export default function Home({ fetchedData, sermonData }) {
 
   return (
     <div className="">
+      <NextNprogress color="#29D" height={3} showOnShallow={true}/>
       <Head>
         <title>iDress</title>
         <link rel="icon" href="/favicon.ico" />

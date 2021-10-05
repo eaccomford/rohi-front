@@ -1,5 +1,5 @@
 module.exports = {
     images: {
-        domains: ["localhost"]
+        domains: ["localhost","https://www.youtube.com"]
     }
 }
