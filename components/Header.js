@@ -9,10 +9,11 @@ import {
   UsersIcon,
 } from "@heroicons/react/solid";
 import { useRecoilState } from "recoil";
-import { loginState } from "../recoil/atoms";
+import { loginState,loginData } from "../recoil/atoms";
 
 function Header({ showScrollHead, searchTermValue }) {
   const [loginClicked, setLoginClicked] = useRecoilState(loginState);
+  const [loginDataState, setLogindataState] = useRecoilState(loginData);
   const searchTermRef = useRef(null);
 
   const searchEntered = () => {
@@ -102,11 +103,24 @@ function Header({ showScrollHead, searchTermValue }) {
             {/* login status */}
             {loginClicked && (
               <div className="flex items-center justify-end ml-3 space-x-5">
-                <p className="hidden cursor-pointer md:inline">E.Accomford</p>
-                <div className="flex items-center p-2 space-x-2 border-2 rounded-full">
+                <p className="hidden cursor-pointer md:inline">{loginDataState?.user?.username}</p>
+                <div className="ml-1">
+                {loginDataState?.user?.image != null && (
+                     <Image
+                      className="rounded-full"
+                      src={"http://localhost:1337" + loginDataState?.user?.image?.url}
+                      objectFit="cover"
+                      objectPosition="center"
+                      objectPosition="center"
+                      width="40"
+                      height="35"
+                    />
+                  )}
+                </div>
+                {/* <div className="flex items-center p-2 space-x-2 border-2 rounded-full">
                   <MenuIcon className="h-6" />
                   <UserCircleIcon className="h-6" />
-                </div>
+                </div> */}
               </div>
             )}
           </div>

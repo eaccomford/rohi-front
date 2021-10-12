@@ -27,6 +27,7 @@ function Index({ fetchedData, eventsData }) {
   const [toggleMenuState, setToggleMenuState] = useState('whywegive');
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [sermonCommentState, setSermonCommentState] = useState([]);
+  const [loginClicked, setLoginClicked] = useRecoilState(loginState);
 
   const router = useRouter();
   const sermonId = router.query.sermonId;
@@ -57,7 +58,6 @@ function Index({ fetchedData, eventsData }) {
     setToggleMenuState(menu)
   };
 
-  const [loginClicked, setLoginClicked] = useRecoilState(loginState);
   const [showPaymentOptions, setShowPaymentOptions] = useState(false);
   useEffect(() => {
     loginClicked ? setShowPaymentOptions(true) : false
@@ -74,8 +74,8 @@ function Index({ fetchedData, eventsData }) {
           <div className="hidden sm:pr-3 sm:block">
             <div className="mt-2 bg-gray-100 rounded-2xl">
               <h1 className="p-2 text-xl font-bold">Donations</h1>
-              <LoginModal/>
-              {showPaymentOptions ? (
+              {!loginClicked && <LoginModal/> }
+              {loginClicked ? (
                 <>
                 <div onClick={() => toggleMenu('momo')} className="py-3 pl-4 cursor-pointer hover:bg-gray-200 hover:transition-all hover:duration-600">
                   <div className="flex justify-between text-sm rounded">

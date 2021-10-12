@@ -1,14 +1,62 @@
 import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/solid";
-import React from "react";
+import React, { useRef, useState } from "react";
 import { useRecoilState } from "recoil";
-import { loginState } from "../recoil/atoms";
+import { loginState, loginData } from "../recoil/atoms";
+import axios from "axios";
 
 export default function LoginModal() {
-  const [showModal, setShowModal] = React.useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [loginClicked, setLoginClicked] = useRecoilState(loginState);
-  const [loginBgColor, setLoginBgColor] = React.useState(
+  const [loginDataState, setLoginDataState] = useRecoilState(loginData);
+  const [loginStatus, setLoginStatus] = useState(null);
+  const [emptyCredentials, setEmptyCredentials] = useState(null);
+  const [loginBgColor, setLoginBgColor] = useState(
     "bg-red-400 cursor-pointer hover:bg-red-600"
   );
+
+  const identifierRef = useRef(null);
+  const passwordRef = useRef(null);
+
+  const onLogin = async (e) => {
+    e.preventDefault();
+    const password = passwordRef.current.value;
+    const identifier = identifierRef.current.value;
+
+    if (password == "" || identifier == "") {
+      setEmptyCredentials("Enter Credentials and try again");
+      return;
+    }
+
+    let url = "http://localhost:3000/api/login";
+
+    await axios({
+      method: "post",
+      url: url,
+      data: {
+        identifier: identifier,
+        password: password,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        //'Authorization': 'Bearer '+token
+      },
+      //headers: {'Content-Type': 'multipart/form-data' }
+    })
+      .then(function (response) {
+        if (response.data.status == 1) {
+          setShowModal(false);
+          setLoginClicked(true);
+          setLoginStatus(1);
+          setLoginDataState(response.data.data);
+        } else {
+          setLoginStatus(0);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   React.useEffect(() => {
     if (loginClicked) {
@@ -59,17 +107,35 @@ export default function LoginModal() {
                 </div>
                 {/*body*/}
                 <div className="relative flex-auto w-[600px] p-6 ">
+                  <div className="mb-3 shadow-lg">
+                    {loginStatus == 0 ? (
+                      <div className="p-3 text-white bg-red-500 rounded-lg">
+                        Username or Password is not correct
+                      </div>
+                    ) : (
+                      <span></span>
+                    )}
+                    {emptyCredentials !== null ? (
+                      <div className="p-3 text-white bg-red-500 rounded-lg">
+                        Enter Username or Password and try again
+                      </div>
+                    ) : (
+                      <span></span>
+                    )}
+                  </div>
                   <span className="pl-2 font-bold text-gray-600">Username</span>
                   <input
                     placeholder="Enter Username"
                     type="text"
+                    ref={identifierRef}
                     className="w-full p-2 mx-2 my-3 border-2 rounded-lg"
                   />
                   <br />
                   <span className="pl-2 font-bold text-gray-600">Password</span>
                   <input
                     placeholder="Enter Password"
-                    type="text"
+                    type="password"
+                    ref={passwordRef}
                     className="w-full p-2 mx-2 my-3 border-2 rounded-lg"
                   />
                   <br />
@@ -89,10 +155,7 @@ export default function LoginModal() {
                   <button
                     className="p-3 px-6 mb-1 mr-1 text-sm font-bold text-white transition-all duration-150 ease-linear bg-green-400 rounded-lg shadow outline-none bg-emerald-500 active:bg-emerald-600 hover:shadow-lg hover:bg-green-300 active:scale-90 focus:outline-none"
                     type="button"
-                    onClick={() => {
-                      setShowModal(false);
-                      setLoginClicked(true);
-                    }}
+                    onClick={onLogin}
                   >
                     Sign In
                   </button>

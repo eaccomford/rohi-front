@@ -9,6 +9,10 @@ export const loginState = atom({
   key: "loginState",
   default: false,
 });
+export const loginData = atom({
+  key: "loginData",
+  default: false,
+});
 
-const atoms = { textState, loginState };
+const atoms = { textState, loginState, loginData };
 export default atoms;
