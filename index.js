@@ -35,7 +35,7 @@ function Index({ fetchedData, eventsData }) {
 
   useEffect(async () => {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/api/sermon-comment/${sermonId}`
+      `http://localhost:3000/api/sermon-comment/${sermonId}`
     ).then((res) => res.json());
     setSermonCommentState(res);
   }, [sermonId]);
@@ -167,7 +167,7 @@ function Index({ fetchedData, eventsData }) {
                       <div className="flex items-center justify-center">
                         <div className="mr-2 text-gray-400">
                           <Image
-                            src={`${process.env.NEXT_PUBLIC_URL}${item.image.formats.thumbnail.url}`}
+                            src={`${process.env.NEXT_PUBLIC_URL}/${item.image.formats.thumbnail.url}`}
                             width="50"
                             height="50"
                             className="rounded-full"
@@ -191,10 +191,10 @@ function Index({ fetchedData, eventsData }) {
 
 export async function getStaticProps(context) {
   const fetchedData = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/page-contents/1`
+    `process.env.NEXT_PUBLIC_URL/page-contents/1`
   ).then((res) => res.json());
 
-  const eventsData = await fetch(`${process.env.NEXT_PUBLIC_URL}/pages/1`).then(
+  const eventsData = await fetch(`process.env.NEXT_PUBLIC_URL/pages/1`).then(
     (res) => res.json()
   );
 

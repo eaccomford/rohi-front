@@ -1,5 +1,5 @@
-import "tailwindcss/tailwind.css";
-import { RecoilRoot } from "recoil";
+import 'tailwindcss/tailwind.css';
+import { RecoilRoot } from 'recoil';
 
 function MyApp({ Component, pageProps }) {
   return (

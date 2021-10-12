@@ -1,22 +1,22 @@
-import { useRef, useEffect, useState } from "react";
-import Image from "next/image";
-import { PencilAltIcon, SaveAsIcon } from "@heroicons/react/solid";
-import axios from "axios";
+import { useRef, useEffect, useState } from 'react';
+import Image from 'next/image';
+import { PencilAltIcon, SaveAsIcon } from '@heroicons/react/solid';
+import axios from 'axios';
 
 function Momo() {
-  const [selectedMomo, setSelectedMomo] = useState("");
-  const [vodafoneMomoStyle, setVodafoneMomoStyle] = useState("");
-  const [tigoMomoStyle, setTigoMomoStyle] = useState("");
-  const [mtnMomoStyle, setMtnMomoStyle] = useState("");
-  const [transData, setTransData] = useState("");
+  const [selectedMomo, setSelectedMomo] = useState('');
+  const [vodafoneMomoStyle, setVodafoneMomoStyle] = useState('');
+  const [tigoMomoStyle, setTigoMomoStyle] = useState('');
+  const [mtnMomoStyle, setMtnMomoStyle] = useState('');
+  const [transData, setTransData] = useState('');
 
   const nameRef = useRef(null);
   const emailRef = useRef(null);
   const messageRef = useRef(null);
 
   const onButtonClick = async (e) => {
-    if (selectedMomo == "") {
-      alert("Select Mobile Money Vendor");
+    if (selectedMomo == '') {
+      alert('Select Mobile Money Vendor');
       return;
     }
 
@@ -24,10 +24,10 @@ function Momo() {
     const name = nameRef.current.value;
     const email = emailRef.current.value;
     const message = messageRef.current.value;
-    let paymentReceivedUrl = "http://localhost:3000/api/payment";
+    let paymentReceivedUrl = `${process.env.NEXT_PUBLIC_URL}/api/payment`;
 
     await axios({
-      method: "post",
+      method: 'post',
       url: paymentReceivedUrl,
       data: {
         name: name,
@@ -36,34 +36,34 @@ function Momo() {
         vendor: selectedMomo.toUpperCase(),
       },
       headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
       },
     })
       .then(function (response) {
         // check payment
         setTimeout(() => {
-           checkPaymentIsAproved(response.data.transactionid);
+          checkPaymentIsAproved(response.data.transactionid);
         }, 5000);
       })
       .catch((error) => {
-        console.log("=== error receiving payment ===");
+        console.log('=== error receiving payment ===');
         console.log(error);
       });
   };
 
   // check payment is approved
   function checkPaymentIsAproved(transId) {
-    let url = "http://localhost:3000/api/payment/check-payment";
-     axios({
-      method: "post",
+    let url = `${process.env.NEXT_PUBLIC_URL}/api/payment/check-payment`;
+    axios({
+      method: 'post',
       url: url,
       data: {
         transId: transId,
       },
       headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
         //'Authorization': 'Bearer '+token
       },
     })
@@ -71,36 +71,36 @@ function Momo() {
         setTransData(response);
       })
       .catch((error) => {
-        console.log("=== error validating payment approval ===");
+        console.log('=== error validating payment approval ===');
         console.log(error);
       });
-    emailRef.current.value = "";
-    messageRef.current.value = "";
-    nameRef.current.value = "";
+    emailRef.current.value = '';
+    messageRef.current.value = '';
+    nameRef.current.value = '';
   }
 
   function setSelectedMomoBtn(momo) {
     setSelectedMomo(momo);
     switch (momo) {
-      case "Vodafone":
-        setVodafoneMomoStyle("bg-red-100 shadow-xl");
-        setTigoMomoStyle("");
-        setMtnMomoStyle("");
+      case 'Vodafone':
+        setVodafoneMomoStyle('bg-red-100 shadow-xl');
+        setTigoMomoStyle('');
+        setMtnMomoStyle('');
         break;
-      case "AirtelTigo":
-        setTigoMomoStyle("bg-blue-100 shadow-xl");
-        setMtnMomoStyle("");
-        setVodafoneMomoStyle("");
+      case 'AirtelTigo':
+        setTigoMomoStyle('bg-blue-100 shadow-xl');
+        setMtnMomoStyle('');
+        setVodafoneMomoStyle('');
         break;
-      case "MTN":
-        setMtnMomoStyle("bg-yellow-100 shadow-xl");
-        setTigoMomoStyle("");
-        setVodafoneMomoStyle("");
+      case 'MTN':
+        setMtnMomoStyle('bg-yellow-100 shadow-xl');
+        setTigoMomoStyle('');
+        setVodafoneMomoStyle('');
         break;
       default:
-        setVodafoneMomoStyle("");
-        setTigoMomoStyle("");
-        setMtnMomoStyle("");
+        setVodafoneMomoStyle('');
+        setTigoMomoStyle('');
+        setMtnMomoStyle('');
         break;
     }
   }
@@ -111,9 +111,9 @@ function Momo() {
         <h1 className="py-3 text-2xl font-bold">Mobile Money Donation</h1>
         <div className="flex justify-between p-3 mb-3">
           <div
-            onClick={() => setSelectedMomoBtn("Vodafone")}
+            onClick={() => setSelectedMomoBtn('Vodafone')}
             className={`flex-row px-3 duration-700 rounded-lg cursor-pointer hover:bg-gray-100 active:scale-90 hover:shadow-xl  ${vodafoneMomoStyle}`}
-            style={{ textAlign: "center" }}
+            style={{ textAlign: 'center' }}
           >
             <div>
               <Image
@@ -128,9 +128,9 @@ function Momo() {
             </div>
           </div>
           <div
-            onClick={() => setSelectedMomoBtn("AirtelTigo")}
+            onClick={() => setSelectedMomoBtn('AirtelTigo')}
             className={`flex-row px-3 duration-700 rounded-lg cursor-pointer hover:bg-gray-100 active:scale-90 hover:shadow-xl  ${tigoMomoStyle}`}
-            style={{ textAlign: "center" }}
+            style={{ textAlign: 'center' }}
           >
             <div>
               <Image
@@ -146,9 +146,9 @@ function Momo() {
             <div className="mt-1">AirtelTigo</div>
           </div>
           <div
-            onClick={() => setSelectedMomoBtn("MTN")}
+            onClick={() => setSelectedMomoBtn('MTN')}
             className={`flex-row px-3 duration-700 rounded-lg cursor-pointer hover:bg-gray-100 active:scale-90 hover:shadow-xl  ${mtnMomoStyle}`}
-            style={{ textAlign: "center" }}
+            style={{ textAlign: 'center' }}
           >
             <div>
               <Image
@@ -167,7 +167,7 @@ function Momo() {
 
         {/* form */}
         <div className="w-full">
-          {transData != "" ? (
+          {transData != '' ? (
             <div className="p-3 mb-3 text-yellow-700 bg-yellow-300 rounded-lg">
               <div className="flex justify-between">
                 <di>Message:</di>
@@ -190,10 +190,10 @@ function Momo() {
           >
             <PencilAltIcon className="h-6" />
             <span>
-              Enter{" "}
+              Enter{' '}
               <span className="text-xl text-black text-white">
                 {selectedMomo}
-              </span>{" "}
+              </span>{' '}
               MOMO Details
             </span>
           </div>

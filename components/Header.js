@@ -1,15 +1,15 @@
-import React, { useRef } from "react";
-import Link from "next/Link";
-import Image from "next/image";
+import React, { useRef } from 'react';
+import Link from 'next/Link';
+import Image from 'next/image';
 import {
   SearchIcon,
   GlobeAltIcon,
   MenuIcon,
   UserCircleIcon,
   UsersIcon,
-} from "@heroicons/react/solid";
-import { useRecoilState } from "recoil";
-import { loginState,loginData } from "../recoil/atoms";
+} from '@heroicons/react/solid';
+import { useRecoilState } from 'recoil';
+import { loginState, loginData } from '../recoil/atoms';
 
 function Header({ showScrollHead, searchTermValue }) {
   const [loginClicked, setLoginClicked] = useRecoilState(loginState);
@@ -35,7 +35,7 @@ function Header({ showScrollHead, searchTermValue }) {
                   objectFit="contain"
                   objectPosition="left"
                 />
-                 <div className="ml-[40px] hidden md:flex">The Rohi Church</div>
+                <div className="ml-[40px] hidden md:flex">The Rohi Church</div>
               </div>
             </Link>
           </div>
@@ -103,12 +103,17 @@ function Header({ showScrollHead, searchTermValue }) {
             {/* login status */}
             {loginClicked && (
               <div className="flex items-center justify-end ml-3 space-x-5">
-                <p className="hidden cursor-pointer md:inline">{loginDataState?.user?.username}</p>
+                <p className="hidden cursor-pointer md:inline">
+                  {loginDataState?.user?.username}
+                </p>
                 <div className="ml-1">
-                {loginDataState?.user?.image != null && (
-                     <Image
+                  {loginDataState?.user?.image != null && (
+                    <Image
                       className="rounded-full"
-                      src={"http://localhost:1337" + loginDataState?.user?.image?.url}
+                      src={
+                        process.env.NEXT_PUBLIC_URL +
+                        loginDataState?.user?.image?.url
+                      }
                       objectFit="cover"
                       objectPosition="center"
                       objectPosition="center"

@@ -1,10 +1,10 @@
-import Image from "next/image";
+import Image from 'next/image';
 function LargeCard({ image, title, subTitle, btnText }) {
   return (
     <section className="relative py-16">
       <div className="relative max-w-full h-96">
         <Image
-          src={"http://localhost:1337" + image}
+          src={process.env.NEXT_PUBLIC_URL + image}
           layout="fill"
           objectFit="cover"
           className="rounded-lg"
