@@ -35,7 +35,7 @@ function Index({ fetchedData, eventsData }) {
 
   useEffect(async () => {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/api/sermon-comment/${sermonId}`
+      `${process.env.NEXT_PUBLIC_LOCAL_URL}/api/sermon-comment/${sermonId}`
     ).then((res) => res.json());
     setSermonCommentState(res);
   }, [sermonId]);

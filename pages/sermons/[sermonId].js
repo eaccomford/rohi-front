@@ -21,6 +21,7 @@ function Details({ fetchedData, eventsData }) {
   const [showMenuSmState, setShowMenuSmState] = useState(false);
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [sermonCommentState, setSermonCommentState] = useState([]);
+  const [formError, setFormError] = useState(null);
 
   const router = useRouter();
   const sermonId = router.query.sermonId;
@@ -31,7 +32,7 @@ function Details({ fetchedData, eventsData }) {
 
   useEffect(async () => {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/api/sermon-comment/${sermonId}`
+      `${process.env.NEXT_PUBLIC_LOCAL_URL}/api/sermon-comment/${sermonId}`
     ).then((res) => res.json());
     setSermonCommentState(res);
   }, [sermonId]);
@@ -53,6 +54,12 @@ function Details({ fetchedData, eventsData }) {
     const name = nameRef.current.value;
     const email = emailRef.current.value;
     const message = messageRef.current.value;
+    if (name === '' || email === '' || message === '') {
+      setFormError('Name, Email and Message are required');
+      setTimeout(() => {
+        setFormError(null);
+      }, 3000);
+    }
     const userData = {
       name: name,
       email: email,
@@ -61,7 +68,7 @@ function Details({ fetchedData, eventsData }) {
     };
 
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/api/sermon-comment/${sermonId}`,
+      `${process.env.NEXT_PUBLIC_LOCAL_URL}/api/sermon-comment/${sermonId}`,
       {
         method: 'POST',
         body: JSON.stringify(userData),
@@ -160,13 +167,18 @@ function Details({ fetchedData, eventsData }) {
             <div className="w-full pr-2">
               <div
                 onClick={showCommentBox}
-                className="flex inline-block p-2 text-sm font-bold text-white bg-green-400 rounded-lg cursor-pointer hover:bg-green-300"
+                className="flex inline-block p-2 ml-2 text-sm font-bold text-white bg-green-400 rounded-lg cursor-pointer hover:bg-green-300"
               >
                 <PencilAltIcon className="h-6" />
                 <span>Leave a Comment</span>
               </div>
               {showCommentForm && (
                 <div className="transition-all ease-in-out transform duration-600">
+                  {formError && (
+                    <div className="p-2 mt-2 ml-2 text-red-400 bg-red-200 rounded-lg">
+                      {formError}
+                    </div>
+                  )}
                   <input
                     ref={nameRef}
                     placeholder="Name"

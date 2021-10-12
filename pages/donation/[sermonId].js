@@ -31,7 +31,7 @@ function Details({ fetchedData, eventsData }) {
 
   useEffect(async () => {
     const res = await fetch(
-      `http://localhost:3000/api/sermon-comment/${sermonId}`
+      `${process.env.NEXT_PUBLIC_LOCAL_URL}/api/sermon-comment/${sermonId}`
     ).then((res) => res.json());
     setSermonCommentState(res);
   }, [sermonId]);
@@ -61,7 +61,7 @@ function Details({ fetchedData, eventsData }) {
     };
 
     const res = await fetch(
-      `http://localhost:3000/api/sermon-comment/${sermonId}`,
+      `${process.env.NEXT_PUBLIC_LOCAL_URL}/api/sermon-comment/${sermonId}`,
       {
         method: 'POST',
         body: JSON.stringify(userData),

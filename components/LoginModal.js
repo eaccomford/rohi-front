@@ -1,8 +1,8 @@
-import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/solid";
-import React, { useRef, useState } from "react";
-import { useRecoilState } from "recoil";
-import { loginState, loginData } from "../recoil/atoms";
-import axios from "axios";
+import { LockClosedIcon, LockOpenIcon } from '@heroicons/react/solid';
+import React, { useRef, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { loginState, loginData } from '../recoil/atoms';
+import axios from 'axios';
 
 export default function LoginModal() {
   const [showModal, setShowModal] = useState(false);
@@ -11,7 +11,7 @@ export default function LoginModal() {
   const [loginStatus, setLoginStatus] = useState(null);
   const [emptyCredentials, setEmptyCredentials] = useState(null);
   const [loginBgColor, setLoginBgColor] = useState(
-    "bg-red-400 cursor-pointer hover:bg-red-600"
+    'bg-red-400 cursor-pointer hover:bg-red-600'
   );
 
   const identifierRef = useRef(null);
@@ -22,23 +22,23 @@ export default function LoginModal() {
     const password = passwordRef.current.value;
     const identifier = identifierRef.current.value;
 
-    if (password == "" || identifier == "") {
-      setEmptyCredentials("Enter Credentials and try again");
+    if (password == '' || identifier == '') {
+      setEmptyCredentials('Enter Credentials and try again');
       return;
     }
 
-    let url = "http://localhost:3000/api/login";
+    let url = `${process.env.NEXT_PUBLIC_LOCAL_URL}/api/login`;
 
     await axios({
-      method: "post",
+      method: 'post',
       url: url,
       data: {
         identifier: identifier,
         password: password,
       },
       headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
         //'Authorization': 'Bearer '+token
       },
       //headers: {'Content-Type': 'multipart/form-data' }
@@ -60,9 +60,9 @@ export default function LoginModal() {
 
   React.useEffect(() => {
     if (loginClicked) {
-      setLoginBgColor("bg-green-400 cursor-pointer hover:bg-green-600");
+      setLoginBgColor('bg-green-400 cursor-pointer hover:bg-green-600');
     } else {
-      setLoginBgColor("bg-red-400 cursor-pointer hover:bg-red-600");
+      setLoginBgColor('bg-red-400 cursor-pointer hover:bg-red-600');
     }
   }, [loginClicked]);
 

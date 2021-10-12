@@ -24,7 +24,7 @@ function SuccessStories({
     };
 
     const res = await fetch(
-      `http://localhost:3000/api/sermon-comment/${sermonId}`,
+      `${process.env.NEXT_PUBLIC_LOCAL_URL}/api/sermon-comment/${sermonId}`,
       {
         method: 'POST',
         body: JSON.stringify(userData),
