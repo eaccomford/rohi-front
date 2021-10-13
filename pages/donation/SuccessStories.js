@@ -123,7 +123,7 @@ function SuccessStories({
             </div>
           </div>
         ))}
-        {sermonCommentState.length < 1 && (
+        {!sermonCommentState && (
           <div className="p-3 text-sm bg-gray-100 rounded-lg">
             Be the first to comment
           </div>

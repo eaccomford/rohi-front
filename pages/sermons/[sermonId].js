@@ -2,6 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Header from '../../components/Header';
+import { useRecoilState } from 'recoil';
 import {
   UsersIcon,
   GiftIcon,
@@ -10,11 +11,12 @@ import {
   ChatIcon,
   SaveAsIcon,
 } from '@heroicons/react/solid';
-import Link from 'next/Link';
+import Link from 'next/link';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import NextNprogress from 'nextjs-progressbar';
 import Footer from '../../components/Footer';
+import { loginState, loginData } from '../../recoil/atoms';
 
 function Details({ fetchedData, eventsData }) {
   const [showScrollHead, setShowScrollHead] = useState(true);
@@ -22,6 +24,8 @@ function Details({ fetchedData, eventsData }) {
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [sermonCommentState, setSermonCommentState] = useState([]);
   const [formError, setFormError] = useState(null);
+  const [loginClicked, setLoginClicked] = useRecoilState(loginState);
+  const [loginDataState, setLogindataState] = useRecoilState(loginData);
 
   const router = useRouter();
   const sermonId = router.query.sermonId;
@@ -51,17 +55,26 @@ function Details({ fetchedData, eventsData }) {
 
   const onButtonClick = async (e) => {
     e.preventDefault();
-    const name = nameRef.current.value;
-    const email = emailRef.current.value;
+
     const message = messageRef.current.value;
-    if (name === '' || email === '' || message === '') {
-      setFormError('Name, Email and Message are required');
-      setTimeout(() => {
-        setFormError(null);
-      }, 3000);
+    if (!loginClicked) {
+      var loginName = nameRef.current.value;
+      var email = emailRef.current.value;
+
+      if (loginName === '' || email === '' || message === '') {
+        setFormError('Name, Email and Message are required');
+        setTimeout(() => {
+          setFormError(null);
+        }, 3000);
+        return;
+      }
+    } else {
+      var email = loginDataState?.user?.username;
+      var loginName = loginDataState?.user?.username;
     }
+
     const userData = {
-      name: name,
+      name: loginName,
       email: email,
       message: message,
       sermonId: sermonId,
@@ -77,10 +90,13 @@ function Details({ fetchedData, eventsData }) {
     );
 
     setSermonCommentState(await res.json());
-
-    emailRef.current.value = '';
-    messageRef.current.value = '';
-    nameRef.current.value = '';
+    if (!loginClicked) {
+      emailRef.current.value = '';
+      messageRef.current.value = '';
+      nameRef.current.value = '';
+    } else {
+      messageRef.current.value = '';
+    }
   };
 
   const showMenuSm = (menu) => {
@@ -179,20 +195,24 @@ function Details({ fetchedData, eventsData }) {
                       {formError}
                     </div>
                   )}
-                  <input
-                    ref={nameRef}
-                    placeholder="Name"
-                    type="text"
-                    className="w-full p-2 mx-2 my-3 border-2 rounded-lg"
-                  />
-                  <br />
-                  <input
-                    ref={emailRef}
-                    placeholder="Email"
-                    type="text"
-                    className="w-full p-2 mx-2 my-3 border-2 rounded-lg"
-                  />
-                  <br />
+                  {!loginClicked && (
+                    <div>
+                      <input
+                        ref={nameRef}
+                        placeholder="Name"
+                        type="text"
+                        className="w-full p-2 mx-2 my-3 border-2 rounded-lg"
+                      />
+                      <br />
+                      <input
+                        ref={emailRef}
+                        placeholder="Email"
+                        type="text"
+                        className="w-full p-2 mx-2 my-3 border-2 rounded-lg"
+                      />
+                      <br />
+                    </div>
+                  )}
                   <textarea
                     rols="4"
                     placeholder="Message"
@@ -322,16 +342,11 @@ function Details({ fetchedData, eventsData }) {
 
 export async function getStaticPaths() {
   return {
-    fallback: true,
+    fallback: 'blocking', // if false nextjs will build and save the pages and requested param not found u get 404. true, blocking
     paths: [
       {
         params: {
           sermonId: '1',
-        },
-      },
-      {
-        params: {
-          sermonId: 'm2',
         },
       },
     ],

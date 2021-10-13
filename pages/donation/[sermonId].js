@@ -10,7 +10,7 @@ import {
   ChatIcon,
   SaveAsIcon,
 } from '@heroicons/react/solid';
-import Link from 'next/Link';
+import Link from 'next/link';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import NextNprogress from 'nextjs-progressbar';
@@ -310,16 +310,11 @@ function Details({ fetchedData, eventsData }) {
 
 export async function getStaticPaths() {
   return {
-    fallback: true,
+    fallback: 'blocking',
     paths: [
       {
         params: {
           sermonId: '1',
-        },
-      },
-      {
-        params: {
-          sermonId: 'm2',
         },
       },
     ],

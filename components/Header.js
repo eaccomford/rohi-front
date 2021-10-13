@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import Link from 'next/Link';
+import Link from 'next/link';
 import Image from 'next/image';
 import {
   SearchIcon,

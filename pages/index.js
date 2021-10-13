@@ -109,5 +109,6 @@ export async function getStaticProps() {
       fetchedData,
       sermonData,
     },
+    //revalidate: 10 - check again in  10 sec
   };
 }
