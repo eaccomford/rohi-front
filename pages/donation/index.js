@@ -66,8 +66,8 @@ function Index({ fetchedData, eventsData }) {
       <NextNprogress color="#29D" height={3} showOnShallow={true} />
       <Header showScrollHead={true} searchTermValue="" />
 
-      <main className="px-8 mx-auto md:px-50 md:mx-20 md:px-[20em]">
-        <div className="grid grid-cols-1 mb-5 lg:grid-cols-6 ">
+      <main className="px-8 mx-auto md:px-50 md:mx-20 md:px-[0em]">
+        <div className="grid grid-cols-1 mb-5 sm:grid-cols-6 lg:grid-cols-6 ">
           {/* other navs */}
           <div className="hidden sm:pr-3 sm:block">
             <div className="mt-2 bg-gray-100 rounded-2xl">
